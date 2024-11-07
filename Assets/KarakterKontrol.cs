@@ -1,6 +1,8 @@
 using System;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class KarakterKontrol : MonoBehaviour
 {
@@ -15,6 +17,7 @@ public class KarakterKontrol : MonoBehaviour
 
     // Not: Engel ve Puan nesnelerinin isTrigger özelliği aktiftir.
 
+    
 
     public TMP_Text metin;
     private Rigidbody2D karakterRb;
@@ -31,12 +34,47 @@ public class KarakterKontrol : MonoBehaviour
 
     void Update()
     {
-        // Yazdığınız metodları çağırınız.
+        HareketEt();
     }
 
+
+    void HareketEt()
+    {
+        if (Input.GetKey(KeyCode.A))
+        {
+            karakterRb.AddForce(UnityEngine.Vector2.left * (hiz * Time.deltaTime));
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            karakterRb.AddForce(UnityEngine.Vector2.down * (hiz * Time.deltaTime));
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            karakterRb.AddForce(UnityEngine.Vector2.right * (hiz * Time.deltaTime));
+        }
+        else if (Input.GetKey(KeyCode.W))
+        {
+            karakterRb.AddForce(UnityEngine.Vector2.up * (ziplamaGucu * Time.deltaTime));
+        }
+
+
+
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Soru 3 ve soru 4 burada çözülecek.
+        if (other.gameObject.CompareTag("puan"))
+        {
+            metin++;
+            Destroy(other.gameObject);
+            metin.text = "puan:" + metin;
+
+        }
+
+        if(other.gameObject.CompareTag("engel"))
+        {
+            Destroy(other.gameObject);
+            Debug.Log("Oyun bitti!");
+        }
     }
 
     void Zipla()
